@@ -6,10 +6,7 @@ import de.ethria.crate.CrateItem;
 import de.ethria.utils.ItemBuilder;
 import de.ethria.utils.MultipageInventory;
 import javafx.scene.chart.BubbleChart;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentWrapper;
@@ -19,12 +16,15 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 public class CrateManager {
 
     private ArrayList<Crate> crates;
+
+    private HashMap<Location, Crate> crateLocation;
 
     public CrateManager() {
         loadCrates();
@@ -33,6 +33,7 @@ public class CrateManager {
 
     public void loadCrates() {
         this.crates = new ArrayList<>();
+        this.crateLocation = new HashMap<>();
 
         if (!Crates.getInstance().getDataFolder().exists()) {
             Crates.getInstance().getDataFolder().mkdirs();
@@ -41,7 +42,23 @@ public class CrateManager {
             if (file.isFile()) {
                 if (file.getName().endsWith(".yml")) {
                     String name = file.getName().replace(".yml", "");
+                    if(name.equalsIgnoreCase("config")) {
+                        continue;
+                    }
                     Crate crate = loadCrateFromConfig(name);
+                    FileManager manager = new FileManager("config");
+                    YamlConfiguration configuration = manager.getConfiguration();
+                    if (configuration.contains("loc." + name)) {
+                        World world = Bukkit.getWorld(configuration.getString("loc." + name + ".world"));
+                        double x = configuration.getDouble("loc." + name + ".x");
+                        double y = configuration.getDouble("loc." + name + ".y");
+                        double z = configuration.getDouble("loc." + name + ".z");
+
+                        Location location = new Location(world, x, y, z);
+                        crateLocation.put(location, crate);
+                    }
+
+
                     if (!crates.contains(crate))
                         crates.add(crate);
                 }
@@ -53,7 +70,7 @@ public class CrateManager {
 
         FileManager manager = new FileManager(getRawName(name));
         YamlConfiguration configuration = manager.getConfiguration();
-        configuration.set("crate.info.name", name);
+        configuration.set("crate.info.name", name.replace("§", "&"));
         configuration.set("crate.info.item", material.toString());
         configuration.set("crate.info.background", Material.GRAY_STAINED_GLASS_PANE.toString());
         configuration.set("crate.info.price", 5000);
@@ -78,11 +95,12 @@ public class CrateManager {
             for (String id : configuration.getConfigurationSection("crate.items").getKeys(false)) {
                 String display = configuration.getString("crate.items." + id + ".display").replace("&", "§");
                 Material mat = Material.valueOf(configuration.getString("crate.items." + id + ".material"));
+                int amount = configuration.getInt("crate.items." + id + ".amount");
                 List<String> lore = configuration.getStringList("crate.items." + id + ".lore");
                 List<String> enchants = configuration.getStringList("crate.items." + id + ".enchants");
                 int chance = configuration.getInt("crate.items." + id + ".chance");
 
-                ItemBuilder builder = new ItemBuilder(mat);
+                ItemBuilder builder = new ItemBuilder(mat, amount);
 
                 if (display.length() > 1) {
                     builder.setDisplayName(display);
@@ -249,5 +267,9 @@ public class CrateManager {
             }
         }
         return null;
+    }
+
+    public HashMap<Location, Crate> getCrateLocation() {
+        return crateLocation;
     }
 }

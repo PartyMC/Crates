@@ -6,7 +6,7 @@
 
     <groupId>de.ethria</groupId>
     <artifactId>Crates</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.3</version>
 
     <name>Crates</name>
 
@@ -74,6 +74,14 @@
             <artifactId>spigot-api</artifactId>
             <version>1.16.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.hunjy</groupId>
+            <artifactId>NBT_API</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/flome/OneDrive/Desktop/TestServer - Kopie/plugins/item-nbt-api-plugin-2.6.0.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

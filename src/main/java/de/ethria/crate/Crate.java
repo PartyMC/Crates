@@ -192,7 +192,6 @@ public class Crate {
     }
 
     public void startFrame(Player player, Inventory inventory, ArrayList<ItemStack> prices, int delay, boolean lastSpin) {
-        System.out.println(delay);
         new BukkitRunnable() {
             int spins = 0;
 
@@ -210,7 +209,21 @@ public class Crate {
 
                 if (lastSpin) {
                     ItemStack win = inventory.getItem(13);
-                    player.sendMessage("§7Du hast " + win.getItemMeta().getDisplayName() + " §7gewonnen!");
+
+                    String winTitle = "";
+
+                    if (win.hasItemMeta()) {
+                        if (win.getItemMeta().hasDisplayName()) {
+                            winTitle = win.getItemMeta().getDisplayName();
+                        } else {
+                            winTitle = win.getType().toString();
+                        }
+                    } else {
+                        winTitle = win.getType().toString();
+                    }
+
+
+                    player.sendMessage("§7Du hast " + win.getAmount() + "§7x " + winTitle + " §7gewonnen!");
                     player.getInventory().addItem(win);
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                     this.cancel();
@@ -219,11 +232,13 @@ public class Crate {
             }
         }.runTaskLaterAsynchronously(Crates.getInstance(), delay);
     }
+
     public void setPlayerWin(Player player, ItemStack win) {
-        if(win.getItemMeta().getDisplayName().equalsIgnoreCase("")) {
+        if (win.getItemMeta().getDisplayName().equalsIgnoreCase("")) {
 
         }
     }
+
     public void getPrice(Player player, Inventory inventory) {
         ItemStack win = inventory.getItem(13);
     }
