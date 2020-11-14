@@ -1,0 +1,8 @@
+name: Crates
+main: de.ethria.Crates
+version: 1.0.0
+author: hunjy
+api-version: 1.16
+
+commands:
+  crate:
