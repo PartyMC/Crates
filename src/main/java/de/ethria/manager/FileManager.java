@@ -17,13 +17,13 @@ public class FileManager {
     public FileManager(String fileName) {
         this.folder = Crates.getInstance().getDataFolder();
 
-        if (this.folder.exists()) {
+        if (!this.folder.exists()) {
             this.folder.mkdirs();
         }
 
         this.file = new File(folder, fileName + ".yml");
 
-        if (this.file.exists()) {
+        if (!this.file.exists()) {
             try {
                 this.file.createNewFile();
             } catch (IOException e) {
