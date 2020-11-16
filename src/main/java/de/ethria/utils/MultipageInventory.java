@@ -80,8 +80,6 @@ public class MultipageInventory {
 
         inventory.setItem(inventory.getSize() - 2, new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("§cZurück").build());
 
-        inventory.setItem(inventory.getSize() - 5, new ItemBuilder(Material.ANVIL).setDisplayName("§aItem hinzufügen").build());
-
         setItems.forEach((integer, itemStack) -> {
             inventory.setItem(integer, itemStack);
         });
@@ -97,6 +95,12 @@ public class MultipageInventory {
 
 
         player.openInventory(inventory);
+    }
+
+    public void setItem(int i, ItemStack itemStack) {
+        setItems.put(i, itemStack);
+
+
     }
 
     public void next() {

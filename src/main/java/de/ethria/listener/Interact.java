@@ -19,7 +19,7 @@ public class Interact implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
             if (player.getInventory().getItemInMainHand() == null) {
                 Location location = event.getClickedBlock().getLocation();
@@ -51,8 +51,17 @@ public class Interact implements Listener {
                             }
                         }
                     }
+                } else {
+                    Location location = event.getClickedBlock().getLocation();
+                    for (Location l : Crates.getInstance().getCrateManager().getCrateLocation().keySet()) {
+                        if (l.distance(location) == 0) {
+                            event.setCancelled(true);
+                            Crate crate = Crates.getInstance().getCrateManager().getCrateLocation().get(location);
+                            Crates.getInstance().getKeyManager().openShop(player, crate);
+                        }
+                    }
                 }
-            }else {
+            } else {
                 Location location = event.getClickedBlock().getLocation();
                 for (Location l : Crates.getInstance().getCrateManager().getCrateLocation().keySet()) {
                     if (l.distance(location) == 0) {
@@ -64,6 +73,15 @@ public class Interact implements Listener {
             }
 
 
+        }else if(event.getAction() == Action.LEFT_CLICK_BLOCK) {
+            Location location = event.getClickedBlock().getLocation();
+            for (Location l : Crates.getInstance().getCrateManager().getCrateLocation().keySet()) {
+                if (l.distance(location) == 0) {
+                    event.setCancelled(true);
+                    Crate crate = Crates.getInstance().getCrateManager().getCrateLocation().get(location);
+                    Crates.getInstance().getCrateManager().openItemChoose(player, crate);
+                }
+            }
         }
     }
 

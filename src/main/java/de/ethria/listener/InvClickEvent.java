@@ -75,6 +75,8 @@ public class InvClickEvent implements Listener {
                 if (itemStack.hasItemMeta()) {
                     if (itemStack.getItemMeta().getDisplayName().startsWith("§aItem hinzufügen")) {
                         Crates.getInstance().getCrateManager().openCrateItemAddItem(player, Crates.getInstance().getCrateManager().getCrateByName(name));
+                    } else if (itemStack.getItemMeta().getDisplayName().startsWith("§eGeld hinzufügen")) {
+
                     }
                 }
                 return;
@@ -108,10 +110,10 @@ public class InvClickEvent implements Listener {
                     } else {
                         Crates.getInstance().getEconomy().withdrawPlayer(offlinePlayer, price);
                         Crate crate = Crates.getInstance().getCrateManager().getCrateByName(itemStack.getItemMeta().getDisplayName().split(": ")[1]);
-                        player.sendMessage("§7Du hast §a" + itemStack.getAmount() + "x " + crate.getDisplayName() + " §3§lKey §7gekauft!" );
+                        player.sendMessage("§7Du hast §a" + itemStack.getAmount() + "x " + crate.getDisplayName() + " §3§lKey §7gekauft!");
                         player.closeInventory();
                         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-                        for(int i = 0; i < itemStack.getAmount(); i++) {
+                        for (int i = 0; i < itemStack.getAmount(); i++) {
                             player.getInventory().addItem(new Key(crate).getKey());
                         }
                     }

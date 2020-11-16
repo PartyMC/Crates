@@ -26,6 +26,7 @@ public class Crates extends JavaPlugin {
 
     private HashMap<UUID, Crate> crateCache;
 
+
     @Override
     public void onEnable() {
         instance = this;
@@ -69,4 +70,5 @@ public class Crates extends JavaPlugin {
     public Economy getEconomy() {
         return economy;
     }
+
 }

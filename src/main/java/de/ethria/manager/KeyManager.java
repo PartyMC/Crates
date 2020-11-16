@@ -61,7 +61,7 @@ public class KeyManager {
         builder.removeAllAtributs();
         lore = new ArrayList<>();
         lore.add("");
-        lore.add("§7Kaufe §e5x §7Key:");
+        lore.add("§7Kaufe §e10x §7Key:");
         lore.add("§7Preis: §7§m" + (crate.getPrice() * 10) + "§e " + (int) (Math.round(crate.getPrice() * 10) * 0.90) + " € §8[§b- 10%§8]");
         builder.addLore(lore);
 

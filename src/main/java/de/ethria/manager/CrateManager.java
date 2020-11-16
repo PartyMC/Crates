@@ -5,16 +5,15 @@ import de.ethria.crate.Crate;
 import de.ethria.crate.CrateItem;
 import de.ethria.utils.ItemBuilder;
 import de.ethria.utils.MultipageInventory;
-import javafx.scene.chart.BubbleChart;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,6 @@ public class CrateManager {
         loadCrates();
     }
 
-
     public void loadCrates() {
         this.crates = new ArrayList<>();
         this.crateLocation = new HashMap<>();
@@ -42,7 +40,7 @@ public class CrateManager {
             if (file.isFile()) {
                 if (file.getName().endsWith(".yml")) {
                     String name = file.getName().replace(".yml", "");
-                    if(name.equalsIgnoreCase("config")) {
+                    if (name.equalsIgnoreCase("config")) {
                         continue;
                     }
                     Crate crate = loadCrateFromConfig(name);
@@ -176,6 +174,7 @@ public class CrateManager {
         MultipageInventory inventory = MultipageInventory.getNew(player);
         inventory.setTitle("§k§l§o§3§lIetms: " + crate.getDisplayName());
         inventory.setRows(6);
+        inventory.setItem(49, new ItemBuilder(Material.ANVIL).setDisplayName("§aItem hinzufügen").build());
         for (CrateItem item : crate.getCrateItems()) {
             inventory.addItemStack(item.getInfoItem());
         }
@@ -271,5 +270,15 @@ public class CrateManager {
 
     public HashMap<Location, Crate> getCrateLocation() {
         return crateLocation;
+    }
+
+    public void openItemChoose(Player player, Crate crate) {
+        MultipageInventory inventory = MultipageInventory.getNew(player);
+        inventory.setTitle("§k§l§o§3§lIetms in der " + crate.getDisplayName());
+        inventory.setRows(6);
+        for (CrateItem item : crate.getCrateItems()) {
+            inventory.addItemStack(item.getInfoItem());
+        }
+        inventory.open();
     }
 }
